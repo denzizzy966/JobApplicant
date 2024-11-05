@@ -6,6 +6,7 @@ import '../../models/work_experience.dart';
 import '../../services/database_service.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/custom_button.dart';
+import '../../widgets/step_progress_indicator.dart';
 import 'review_screen.dart';
 
 class WorkExperienceScreen extends StatefulWidget {
@@ -32,6 +33,7 @@ class _WorkExperienceScreenState extends State<WorkExperienceScreen> {
   final _descriptionController = TextEditingController();
   DateTime? _startDate;
   DateTime? _endDate;
+  bool isEditMode = false;
 
   void _addExperience() {
     if (_formKey.currentState!.validate() && _startDate != null && _endDate != null) {
@@ -107,10 +109,23 @@ class _WorkExperienceScreenState extends State<WorkExperienceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Work Experience'),
+        title: Text(isEditMode ? 'Edit Pengalaman Kerja' : 'Pengalaman Kerja'),
         backgroundColor: AppColors.primary,
+        elevation: 0,
       ),
-      body: SingleChildScrollView(
+      body: Column(
+        children: [
+          if (!isEditMode)
+            Container(
+              width: double.infinity,
+              color: AppColors.primary,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: const StepProgressIndicator(
+                currentStep: ApplicationStep.workHistory,
+              ),
+            ),
+      Expanded(
+        child: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -334,6 +349,10 @@ class _WorkExperienceScreenState extends State<WorkExperienceScreen> {
             ),
           ],
         ),
+        
+            ),
+          ),
+        ],
       ),
     );
   }

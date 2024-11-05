@@ -6,6 +6,7 @@ import '../../models/applicant_status.dart';
 import '../../services/database_service.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/custom_button.dart';
+import '../../widgets/step_progress_indicator.dart';
 import 'education_screen.dart';
 import 'package:intl/intl.dart';
 
@@ -171,168 +172,173 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
             isEditMode ? 'Edit Personal Information' : 'Personal Information'),
         backgroundColor: AppColors.primary,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Progress Indicator
-                if (!isEditMode) ...[
-                  LinearProgressIndicator(
-                    value: 0.25,
-                    backgroundColor: Colors.grey[200],
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(AppColors.primary),
-                  ),
-                  const SizedBox(height: 24),
-                ],
-
-                // Form Fields
-                CustomTextField(
-                  label: 'First Name',
-                  hint: 'Enter first name',
-                  controller: _firstNameController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'First name is required';
-                    }
-                    return null;
-                  },
-                ),
-
-                CustomTextField(
-                  label: 'Last Name',
-                  hint: 'Enter last name',
-                  controller: _lastNameController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Last name is required';
-                    }
-                    return null;
-                  },
-                ),
-
-                CustomTextField(
-                  label: 'Email',
-                  hint: 'Enter email address',
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: _validateEmail,
-                ),
-
-                CustomTextField(
-                  label: 'Phone',
-                  hint: 'Enter phone number',
-                  controller: _phoneController,
-                  keyboardType: TextInputType.phone,
-                  validator: _validatePhone,
-                ),
-
-                CustomTextField(
-                  label: 'Position Applied',
-                  hint: 'Enter position',
-                  controller: _positionController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Position is required';
-                    }
-                    return null;
-                  },
-                ),
-
-                CustomTextField(
-                  label: 'Address',
-                  hint: 'Enter address',
-                  controller: _addressController,
-                  maxLines: 3,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Address is required';
-                    }
-                    return null;
-                  },
-                ),
-
-                // Birth Date Picker
-                const Text(
-                  'Birth Date',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                    color: AppColors.text,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                InkWell(
-                  onTap: () => _selectDate(context),
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: _birthDate == null
-                            ? Colors.red
-                            : Colors.transparent,
+      body: Column(
+        children: [
+           if (!isEditMode) // Tampilkan hanya jika mode tambah baru
+            Container(
+              width: double.infinity,
+              color: AppColors.primary,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: const StepProgressIndicator(
+                currentStep: ApplicationStep.details,
+              ),
+            ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Form Fields
+                      CustomTextField(
+                        label: 'First Name',
+                        hint: 'Enter first name',
+                        controller: _firstNameController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'First name is required';
+                          }
+                          return null;
+                        },
                       ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          _birthDate == null
-                              ? 'Select birth date'
-                              : DateFormat('dd MMMM yyyy').format(_birthDate!),
-                          style: TextStyle(
-                            color: _birthDate == null
-                                ? Colors.grey
-                                : AppColors.text,
+
+                      CustomTextField(
+                        label: 'Last Name',
+                        hint: 'Enter last name',
+                        controller: _lastNameController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Last name is required';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      CustomTextField(
+                        label: 'Email',
+                        hint: 'Enter email address',
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: _validateEmail,
+                      ),
+
+                      CustomTextField(
+                        label: 'Phone',
+                        hint: 'Enter phone number',
+                        controller: _phoneController,
+                        keyboardType: TextInputType.phone,
+                        validator: _validatePhone,
+                      ),
+
+                      CustomTextField(
+                        label: 'Position Applied',
+                        hint: 'Enter position',
+                        controller: _positionController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Position is required';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      CustomTextField(
+                        label: 'Address',
+                        hint: 'Enter address',
+                        controller: _addressController,
+                        maxLines: 3,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Address is required';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      // Birth Date Picker
+                      const Text(
+                        'Birth Date',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                          color: AppColors.text,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      InkWell(
+                        onTap: () => _selectDate(context),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: _birthDate == null
+                                  ? Colors.red
+                                  : Colors.transparent,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                _birthDate == null
+                                    ? 'Select birth date'
+                                    : DateFormat('dd MMMM yyyy')
+                                        .format(_birthDate!),
+                                style: TextStyle(
+                                  color: _birthDate == null
+                                      ? Colors.grey
+                                      : AppColors.text,
+                                ),
+                              ),
+                              const Icon(Icons.calendar_today),
+                            ],
                           ),
                         ),
-                        const Icon(Icons.calendar_today),
-                      ],
-                    ),
-                  ),
-                ),
-                if (_birthDate == null)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 8),
-                    child: Text(
-                      'Birth date is required',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 12,
                       ),
-                    ),
+                      if (_birthDate == null)
+                        const Padding(
+                          padding: EdgeInsets.only(top: 8),
+                          child: Text(
+                            'Birth date is required',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+
+                      const SizedBox(height: 32),
+
+                      // Submit Button
+                      CustomButton(
+                        text: isEditMode ? 'Save Changes' : 'Continue',
+                        onPressed: _handleSubmit,
+                      ),
+
+                      if (isEditMode) ...[
+                        const SizedBox(height: 16),
+                        CustomButton(
+                          text: 'Cancel',
+                          onPressed: () => Navigator.pop(context),
+                          isOutlined: true,
+                        ),
+                      ],
+                    ],
                   ),
-
-                const SizedBox(height: 32),
-
-                // Submit Button
-                CustomButton(
-                  text: isEditMode ? 'Save Changes' : 'Continue',
-                  onPressed: _handleSubmit,
                 ),
-
-                if (isEditMode) ...[
-                  const SizedBox(height: 16),
-                  CustomButton(
-                    text: 'Cancel',
-                    onPressed: () => Navigator.pop(context),
-                    isOutlined: true,
-                  ),
-                ],
-              ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

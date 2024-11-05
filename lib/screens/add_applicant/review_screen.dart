@@ -4,6 +4,7 @@ import '../../constants/colors.dart';
 import '../../models/applicant.dart';
 import '../../services/database_service.dart';
 import '../../widgets/custom_button.dart';
+import '../../widgets/step_progress_indicator.dart';
 import '../applicant_list_screen.dart';
 
 class ReviewScreen extends StatelessWidget {
@@ -24,12 +25,23 @@ class ReviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Review Application'),
+        title: const Text('Review Aplikasi'),
         backgroundColor: AppColors.primary,
+        elevation: 0,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
+      body: Column(
+        children: [
+          Container(
+            color: AppColors.primary,
+            padding: const EdgeInsets.only(bottom: 20),
+            child: const StepProgressIndicator(
+              currentStep: ApplicationStep.review,
+            ),
+          ),
+      Expanded(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildSection(
@@ -111,7 +123,10 @@ class ReviewScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
+          ),
+        ),
+        ],
+      )
     );
   }
 
