@@ -1,4 +1,4 @@
-# myapp
+# Job Applicant
 
 A new Flutter project.
 
