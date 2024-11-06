@@ -1,9 +1,18 @@
 // lib/main.dart
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'constants/colors.dart';
-import 'screens/applicant_list_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
   runApp(const MyApp());
 }
 
@@ -13,12 +22,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Job Application',
+      title: 'Lestari JobApplicant',
       theme: ThemeData(
         primaryColor: AppColors.primary,
-        scaffoldBackgroundColor: Colors.grey[100],
+        scaffoldBackgroundColor: Colors.white,
       ),
-      home: const ApplicantListScreen(),
+      home: const SplashScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
