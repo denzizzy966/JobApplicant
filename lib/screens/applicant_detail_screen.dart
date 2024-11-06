@@ -5,6 +5,8 @@ import '../constants/colors.dart';
 import '../models/applicant.dart';
 import '../models/applicant_status.dart';
 import '../services/database_service.dart';
+import '../widgets/social_media_display.dart';
+import '../widgets/social_media_editor.dart';
 import 'add_applicant/personal_info_screen.dart';
 import 'add_applicant/education_screen.dart';
 import 'add_applicant/work_experience_screen.dart';
@@ -179,12 +181,12 @@ Widget _buildStatusActions() {
           Expanded(
             child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                backgroundColor: StatusHelper.getStatusColor(nextStatus).withOpacity(0.1),
+                backgroundColor: StatusHelper.getStatusColor(nextStatus).withOpacity(1.0),
                 foregroundColor: StatusHelper.getStatusColor(nextStatus),
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
               icon: Icon(StatusHelper.getStatusIcon(nextStatus)),
-              label: Text('Lanjut ke ${nextStatus.label}'),
+              label: Text('Lanjut ke ${nextStatus.label}', style:TextStyle(color:Colors.white)),
               onPressed: () async {
                 await _databaseService.updateApplicantStatus(_applicant.id, nextStatus);
                 setState(() {
@@ -198,12 +200,12 @@ Widget _buildStatusActions() {
         if (_applicant.status != ApplicantStatus.rejected)
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red.withOpacity(0.1),
+              backgroundColor: Colors.red.withOpacity(1.0),
               foregroundColor: Colors.red,
               padding: const EdgeInsets.symmetric(vertical: 12),
             ),
             icon: const Icon(Icons.cancel),
-            label: const Text('Tidak Lolos'),
+            label: const Text('Tidak Lolos',style:TextStyle(color:Colors.white)),
             onPressed: () async {
               await _databaseService.updateApplicantStatus(
                 _applicant.id, 
@@ -271,10 +273,36 @@ Widget _buildStatusActions() {
                 _buildInfoItem('Email', _applicant.email, Icons.email),
                 _buildInfoItem('Tanggal Lahir', _formatDate(_applicant.birthDate), Icons.cake),
                 _buildInfoItem('Posisi', _applicant.position, Icons.work),
+                if (_applicant.socialMedia.isNotEmpty) ...[
+                const Divider(height: 24),
+                const Text(
+                  'Social Media',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.text,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SocialMediaDisplay(
+                  socialMedia: _applicant.socialMedia,
+                  isCompact: true,
+                ),
+              ],
               ],
             ),
           ),
         ),
+        if (_applicant.socialMedia.isNotEmpty) ...[
+        const SizedBox(height: 16),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: SocialMediaDisplay(
+              socialMedia: _applicant.socialMedia,
+            ),
+          ),
+        ),
+      ],
       ],
     );
   }

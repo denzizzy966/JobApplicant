@@ -59,6 +59,9 @@ class _WorkExperienceScreenState extends State<WorkExperienceScreen> {
   }
 
   void _handleContinue() {
+    
+    print('WorkExp - Social Media count: ${widget.applicant.socialMedia.length}');
+
     final updatedApplicant = widget.applicant.copyWith(
       workExperience: _experienceList,
     );
@@ -332,10 +335,13 @@ class _WorkExperienceScreenState extends State<WorkExperienceScreen> {
                   birthDate: widget.applicant.birthDate,
                   position: widget.applicant.position,
                   education: widget.applicant.education,
-                  workExperience: _experienceList,    // Menggunakan list pengalaman kerja yang sudah diupdate
+                  workExperience: _experienceList, 
+                  socialMedia: widget.applicant.socialMedia,
                   status: widget.applicant.status,
                   isHidden: widget.applicant.isHidden,
                 );
+
+                print('WorkExp - Updated Social Media count: ${updatedApplicant.socialMedia.length}');
 
                 Navigator.push(
                   context,

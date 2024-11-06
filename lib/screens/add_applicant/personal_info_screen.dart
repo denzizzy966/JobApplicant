@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import '../../constants/colors.dart';
 import '../../models/applicant.dart';
 import '../../models/applicant_status.dart';
+import '../../models/social_media.dart';
 import '../../services/database_service.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/custom_button.dart';
+import '../../widgets/social_media_editor.dart';
+import '../../widgets/social_media_display.dart';
 import '../../widgets/step_progress_indicator.dart';
 import 'education_screen.dart';
 import 'package:intl/intl.dart';
@@ -33,12 +36,14 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   late TextEditingController _addressController;
   DateTime? _birthDate;
   bool isEditMode = false;
+  List<SocialMedia> _socialMedia = [];
 
   @override
   void initState() {
     super.initState();
     isEditMode = widget.applicant != null;
     _initializeControllers();
+    _initializeSocialMedia();
   }
 
   void _initializeControllers() {
@@ -58,6 +63,12 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
     if (isEditMode && widget.applicant?.birthDate != null) {
       _birthDate = DateTime.parse(widget.applicant!.birthDate);
+    }
+  }
+
+  void _initializeSocialMedia() {
+    if (widget.applicant != null) {
+      _socialMedia = List.from(widget.applicant!.socialMedia);
     }
   }
 
@@ -123,6 +134,11 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
   void _handleSubmit() {
     if (_formKey.currentState!.validate() && _birthDate != null) {
+      // Debug print
+      print('Social Media count: ${_socialMedia.length}');
+      for (var sm in _socialMedia) {
+        print('Social Media: ${sm.type.label} - ${sm.username}');
+      }
       final updatedApplicant = Applicant(
         id: widget.applicant?.id ??
             DateTime.now().millisecondsSinceEpoch.toString(),
@@ -136,8 +152,11 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         education: widget.applicant?.education ?? [],
         workExperience: widget.applicant?.workExperience ?? [],
         status: widget.applicant?.status ?? ApplicantStatus.pending,
+        socialMedia: _socialMedia, // Add this
         isHidden: widget.applicant?.isHidden ?? false,
       );
+
+      print('Applicant social media count: ${updatedApplicant.socialMedia.length}');
 
       if (isEditMode) {
         // Jika mode edit, simpan perubahan dan kembali
@@ -169,12 +188,12 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            isEditMode ? 'Edit Personal Information' : 'Personal Information'),
+            isEditMode ? 'Edit Personal Information' : 'Personal Information',style:TextStyle(color:Colors.white)),
         backgroundColor: AppColors.primary,
       ),
       body: Column(
         children: [
-           if (!isEditMode) // Tampilkan hanya jika mode tambah baru
+          if (!isEditMode) // Tampilkan hanya jika mode tambah baru
             Container(
               width: double.infinity,
               color: AppColors.primary,
@@ -315,6 +334,16 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                             ),
                           ),
                         ),
+                      const SizedBox(height: 24),
+
+                      SocialMediaEditor(
+                        socialMedia: _socialMedia,
+                        onChanged: (updatedSocialMedia) {
+                          setState(() {
+                            _socialMedia = updatedSocialMedia;
+                          });
+                        },
+                      ),
 
                       const SizedBox(height: 32),
 

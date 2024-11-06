@@ -58,6 +58,7 @@ class _EducationScreenState extends State<EducationScreen> {
   }
 
   void _handleContinue() {
+    print('Education - Social Media count: ${widget.applicant.socialMedia.length}');
     final updatedApplicant = widget.applicant.copyWith(
       education: _educationList,
     );
@@ -109,7 +110,7 @@ class _EducationScreenState extends State<EducationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditMode ? 'Edit Pendidikan' : 'Pendidikan'),
+        title: Text(isEditMode ? 'Edit Pendidikan' : 'Pendidikan',style:TextStyle(color:Colors.white)),
         backgroundColor: AppColors.primary,
         elevation: 0,
       ),
@@ -330,12 +331,15 @@ class _EducationScreenState extends State<EducationScreen> {
                     address: widget.applicant.address,
                     birthDate: widget.applicant.birthDate,
                     position: widget.applicant.position,
-                    education: _educationList,          // Menggunakan list pendidikan yang sudah diupdate
+                    education: _educationList,   
+                    socialMedia: widget.applicant.socialMedia, // Pastikan social media dibawa
                     workExperience: widget.applicant.workExperience,
                     status: widget.applicant.status,
                     isHidden: widget.applicant.isHidden,
                   );
-
+                  
+                  print('Education - Updated Social Media count: ${updatedApplicant.socialMedia.length}');
+                  
                   Navigator.push(
                     context,
                     MaterialPageRoute(

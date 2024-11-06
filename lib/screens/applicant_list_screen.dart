@@ -78,27 +78,29 @@ class _ApplicantListScreenState extends State<ApplicantListScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Daftar Pelamar'),
+        title: const Text(
+          'Daftar Pelamar',
+          style: TextStyle(color:Colors.white),),
         backgroundColor: AppColors.primary,
-        actions: [
+        // actions: [
           // Toggle hidden applicants
-          TextButton.icon(
-            onPressed: () {
-              setState(() {
-                _showHidden = !_showHidden;
-                _updateFilteredList();
-              });
-            },
-            icon: Icon(
-              _showHidden ? Icons.visibility : Icons.visibility_off,
-              color: Colors.white,
-            ),
-            label: Text(
-              _showHidden ? 'Sembunyikan Hidden' : 'Tampilkan Hidden',
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-        ],
+          // TextButton.icon(
+          //   onPressed: () {
+          //     setState(() {
+          //       _showHidden = !_showHidden;
+          //       _updateFilteredList();
+          //     });
+          //   },
+          //   icon: Icon(
+          //     _showHidden ? Icons.visibility : Icons.visibility_off,
+          //     color: Colors.white,
+          //   ),
+          //   label: Text(
+          //     _showHidden ? 'Sembunyikan Hidden' : 'Tampilkan Hidden',
+          //     style: const TextStyle(color: Colors.white),
+          //   ),
+          // ),
+        // ],
       ),
       body: Column(
         children: [
@@ -211,31 +213,128 @@ class _ApplicantListScreenState extends State<ApplicantListScreen> {
                   ],
                 ),
 
-                // Results count
                 const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Menampilkan ${_filteredApplicants.length} pelamar',
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                    if (_selectedPosition != null || _selectedStatus != null)
-                      TextButton(
-                        onPressed: () {
-                          setState(() {
-                            _selectedPosition = null;
-                            _selectedStatus = null;
-                            _updateFilteredList();
-                          });
-                        },
-                        child: const Text('Reset Filter'),
-                      ),
-                  ],
+
+          // Visibility and Count Row
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                // Visibility Icon
+                // Icon(
+                //   Icons.visibility_off,
+                //   size: 20,
+                //   color: Colors.grey[600],
+                // ),
+                const SizedBox(width: 8),
+                // Count Text
+                Text(
+                  'Menampilkan ${_filteredApplicants.length} pelamar',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 14,
+                  ),
+                ),
+                const Spacer(),
+                // Toggle Switch
+                Switch(
+                  value: _showHidden,
+                  onChanged: (value) {
+                    setState(() {
+                      _showHidden = value;
+                      _updateFilteredList();
+                    });
+                  },
+                  activeColor: AppColors.primary,
                 ),
               ],
             ),
           ),
+              // const SizedBox(height: 16),
+              
+              // // Toggle Hidden Button
+              // Container(
+              //   width: double.infinity,
+              //   decoration: BoxDecoration(
+              //     color: Colors.grey[100],
+              //     borderRadius: BorderRadius.circular(8),
+              //   ),
+              //   child: InkWell(
+              //     onTap: () {
+              //       setState(() {
+              //         _showHidden = !_showHidden;
+              //         _updateFilteredList();
+              //       });
+              //     },
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(12),
+              //       child: Row(
+              //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //         children: [
+              //           Row(
+              //             children: [
+              //               Icon(
+              //                 _showHidden ? Icons.visibility : Icons.visibility_off,
+              //                 color: AppColors.primary,
+              //                 size: 20,
+              //               ),
+              //               const SizedBox(width: 8),
+              //               Text(
+              //                 _showHidden ? 'Sembunyikan Hidden' : 'Tampilkan Hidden',
+              //                 style: const TextStyle(
+              //                   color: AppColors.text,
+              //                   fontWeight: FontWeight.w500,
+              //                 ),
+              //               ),
+              //             ],
+              //           ),
+              //           Switch(
+              //             value: _showHidden,
+              //             onChanged: (value) {
+              //               setState(() {
+              //                 _showHidden = value;
+              //                 _updateFilteredList();
+              //               });
+              //             },
+              //             activeColor: AppColors.primary,
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              //   // Results count
+              //   const SizedBox(height: 16),
+              //   Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Text(
+              //         'Menampilkan ${_filteredApplicants.length} pelamar',
+              //         style: const TextStyle(color: Colors.grey),
+              //       ),
+              //       if (_selectedPosition != null || _selectedStatus != null)
+              //         TextButton(
+              //           onPressed: () {
+              //             setState(() {
+              //               _selectedPosition = null;
+              //               _selectedStatus = null;
+              //               _updateFilteredList();
+              //             });
+              //           },
+              //           child: const Text('Reset Filter'),
+              //         ),
+              //     ],
+              //   ),
+              ],
+            ),
+          ),
+
+          
+    
 
           // Applicant List
           Expanded(
@@ -260,7 +359,8 @@ class _ApplicantListScreenState extends State<ApplicantListScreen> {
           ).then((_) => _updateFilteredList());
         },
         backgroundColor: AppColors.primary,
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add,
+        color: Colors.white,),
       ),
     );
   }
